@@ -50,12 +50,6 @@
                             <img src="{{ $image['url'] }}" alt="{{ $product->name }} gallery image {{ $loop->iteration }}" loading="lazy">
                         @endforeach
                     </div>
-                @else
-                    <div class="product-gallery" aria-label="{{ $product->name }} gallery">
-                        @foreach(['harvest', 'freshness', 'selection', 'packing', 'details'] as $label)
-                            <x-picture :src="'/images/products/'.$product->slug.'-'.$label.'.jpg'" :alt="$product->name.' '.ucfirst($label)" />
-                        @endforeach
-                    </div>
                 @endif
             </div>
             <div class="product-detail__copy">
