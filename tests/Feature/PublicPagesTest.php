@@ -43,10 +43,18 @@ class PublicPagesTest extends TestCase
             ->assertSee('data-produce-marquee-toggle', false)
             ->assertSee('Fresh Kiwi')
             ->assertSee(route('products.show', $product->slug), false)
-            ->assertSee('products/fresh-kiwi.jpg', false)
+            ->assertSee('picture-placeholder', false)
             ->getContent();
 
         $this->assertSame(2, preg_match_all('/class="produce-marquee__group"/', $html));
+    }
+
+    public function test_missing_site_photography_renders_an_accessible_placeholder(): void
+    {
+        $this->get(route('about'))
+            ->assertOk()
+            ->assertSee('picture-placeholder', false)
+            ->assertSee('Farmer selecting fresh produce', false);
     }
 
     public function test_static_pages_have_single_main_heading_and_seo_metadata(): void

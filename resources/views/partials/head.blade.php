@@ -7,7 +7,7 @@
 <meta property="og:url" content="{{ request()->url() }}">
 <meta property="og:title" content="@hasSection('title')@yield('title') | {{ setting('general.site_name', 'Deshmaya') }}@else{{ setting('seo.default_title', config('app.name')) }}@endif">
 <meta property="og:description" content="@yield('description', setting('seo.default_description', ''))">
-@if(isset($product) && ($og = $product->getFirstMediaUrl('featured')))
+@if(isset($product) && ($og = $product->getAvailableMediaUrl()))
     <meta property="og:image" content="{{ $og }}">
 @elseif($og = setting_url('seo.og_image'))
     <meta property="og:image" content="{{ $og }}">

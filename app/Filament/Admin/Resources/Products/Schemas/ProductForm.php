@@ -46,12 +46,14 @@ class ProductForm
                     ->schema([
                         SpatieMediaLibraryFileUpload::make('featured_image')
                             ->collection('featured')
+                            ->disk('public')
                             ->label('Featured image')
                             ->image()
                             ->conversion('preview')
                             ->maxSize(10240),
                         SpatieMediaLibraryFileUpload::make('gallery')
                             ->collection('gallery')
+                            ->disk('public')
                             ->multiple()
                             ->reorderable()
                             ->image()

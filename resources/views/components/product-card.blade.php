@@ -1,7 +1,7 @@
 @props(['product'])
 
 @php
-    $image = $product->getFirstMediaUrl('featured', 'preview') ?: $product->getFirstMediaUrl('featured');
+    $image = $product->getAvailableMediaUrl();
 @endphp
 
 <article class="product-card hover-lift" data-reveal>

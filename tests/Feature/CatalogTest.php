@@ -190,9 +190,17 @@ class CatalogTest extends TestCase
             ->assertHasNoErrors();
 
         $product = Product::query()->where('slug', 'product-with-media')->firstOrFail();
+        $media = $product->getFirstMedia('featured');
 
         $this->assertSame(1, $product->getMedia('featured')->count());
         $this->assertSame(1, $product->getMedia('gallery')->count());
+        $this->assertSame('public', $media->disk);
+        $this->assertNotNull($product->getAvailableMediaUrl());
+
+        Storage::disk($media->disk)->delete($media->getPathRelativeToRoot());
+        Storage::disk($media->conversions_disk ?: $media->disk)->delete($media->getPathRelativeToRoot('preview'));
+
+        $this->assertNull($product->getAvailableMediaUrl());
     }
 
     public function test_admin_can_edit_and_soft_delete_catalog_records(): void

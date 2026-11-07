@@ -97,6 +97,10 @@
 .home-hero h1 span { display: block; color: color-mix(in srgb, var(--brand-accent) 38%, white); }
 .home-hero__copy { max-width: 500px; margin-top: 20px; color: rgb(255 255 255 / .9); font-size: clamp(14px, 1.4vw, 17px); line-height: 1.7; }
 .home-hero .button-row { margin-top: 28px; }
+.picture-placeholder { position: relative; overflow: hidden; min-height: 160px; isolation: isolate; background: linear-gradient(135deg, color-mix(in srgb, var(--brand-primary) 78%, white), color-mix(in srgb, var(--brand-accent) 70%, white) 50%, color-mix(in srgb, var(--brand-secondary) 50%, var(--brand-primary-dark))); }
+.picture-placeholder::before, .picture-placeholder::after { position: absolute; display: block; border-radius: 50%; content: ''; pointer-events: none; }
+.picture-placeholder::before { width: 58%; aspect-ratio: 1; right: -9%; bottom: -48%; background: rgb(255 255 255 / .17); }
+.picture-placeholder::after { width: 32%; aspect-ratio: 1; top: -21%; right: 18%; background: rgb(255 255 255 / .12); }
 .trust-strip { position: relative; z-index: 3; border-bottom: 1px solid var(--brand-border); background: white; }
 .trust-strip__grid { display: grid; grid-template-columns: repeat(4, 1fr); }
 .trust-item { display: flex; min-height: 82px; align-items: center; justify-content: center; gap: 11px; padding: 14px; }
@@ -125,6 +129,7 @@
 .produce-marquee__group { display: flex; flex: 0 0 auto; align-items: flex-start; gap: 28px; padding-right: 28px; }
 .produce-marquee__item { display: flex; width: 136px; flex: 0 0 136px; flex-direction: column; align-items: center; gap: 9px; color: var(--brand-text); text-align: center; }
 .produce-marquee__media { display: grid; width: 120px; aspect-ratio: 1; place-items: center; overflow: hidden; border: 2px solid var(--brand-primary-dark); border-radius: 50%; background: white; transition: border-color .2s ease; }
+.produce-marquee__media.has-unavailable-image { background: linear-gradient(135deg, color-mix(in srgb, var(--brand-primary) 78%, white), color-mix(in srgb, var(--brand-accent) 70%, white) 50%, color-mix(in srgb, var(--brand-secondary) 50%, var(--brand-primary-dark))); }
 .produce-marquee__media picture { display: block; width: 100%; height: 100%; }
 .produce-marquee__image { display: block; width: 82%; height: 82%; object-fit: contain; transition: transform .3s ease; }
 .produce-marquee__image.is-unavailable { visibility: hidden; }

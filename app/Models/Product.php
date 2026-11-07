@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -61,6 +62,31 @@ class Product extends Model implements HasMedia
     public function scopeFeatured(Builder $query): Builder
     {
         return $query->where('is_featured', true);
+    }
+
+    public function getAvailableMediaUrl(string $collection = 'featured', array $conversions = ['preview']): ?string
+    {
+        return $this->getMediaUrlIfAvailable($this->getFirstMedia($collection), $conversions);
+    }
+
+    public function getMediaUrlIfAvailable(?Media $media, array $conversions = ['preview']): ?string
+    {
+        if (! $media) {
+            return null;
+        }
+
+        $conversionDisk = Storage::disk($media->conversions_disk ?: $media->disk);
+
+        foreach ($conversions as $conversion) {
+            if ($media->hasGeneratedConversion($conversion)
+                && $conversionDisk->exists($media->getPathRelativeToRoot($conversion))) {
+                return $media->getUrl($conversion);
+            }
+        }
+
+        return Storage::disk($media->disk)->exists($media->getPathRelativeToRoot())
+            ? $media->getUrl()
+            : null;
     }
 
     public function registerMediaCollections(): void

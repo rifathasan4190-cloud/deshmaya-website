@@ -29,6 +29,7 @@ const handleProduceImageError = (image) => {
     }
 
     image.classList.add('is-unavailable');
+    image.closest('.produce-marquee__media')?.classList.add('has-unavailable-image');
 };
 
 document.addEventListener('error', (event) => {

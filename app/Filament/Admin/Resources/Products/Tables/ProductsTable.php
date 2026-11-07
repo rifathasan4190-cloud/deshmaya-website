@@ -25,7 +25,7 @@ class ProductsTable
             ->columns([
                 ImageColumn::make('featured_image')
                     ->label('Image')
-                    ->state(fn (Product $record): string => $record->getFirstMediaUrl('featured', 'preview') ?: $record->getFirstMediaUrl('featured'))
+                    ->state(fn (Product $record): ?string => $record->getAvailableMediaUrl())
                     ->square(),
                 TextColumn::make('name')->searchable()->sortable(),
                 TextColumn::make('category.name')->label('Category')->sortable(),

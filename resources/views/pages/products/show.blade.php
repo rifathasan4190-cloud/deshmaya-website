@@ -34,17 +34,20 @@
             <span aria-current="page">{{ $product->name }}</span>
         </nav>
         <div class="product-detail">
-            @php($featuredImage = $product->getFirstMediaUrl('featured', 'preview') ?: $product->getFirstMediaUrl('featured'))
+            @php($featuredImage = $product->getAvailableMediaUrl())
+            @php($galleryImages = $product->getMedia('gallery')
+                ->map(fn ($image) => ['media' => $image, 'url' => $product->getMediaUrlIfAvailable($image)])
+                ->filter(fn ($image) => $image['url'] !== null))
             <div class="product-detail__visual">
                 @if($featuredImage)
                     <img class="product-detail__main-image" src="{{ $featuredImage }}" alt="{{ $product->name }}" loading="eager" decoding="async" fetchpriority="high">
                 @else
                     <x-picture class="product-detail__main-image" :src="'/images/products/'.$product->slug.'.jpg'" :alt="$product->name" :eager="true" />
                 @endif
-                @if($product->getMedia('gallery')->isNotEmpty())
+                @if($galleryImages->isNotEmpty())
                     <div class="product-gallery" aria-label="{{ $product->name }} gallery">
-                        @foreach($product->getMedia('gallery') as $image)
-                            <img src="{{ $image->getUrl('preview') }}" alt="{{ $product->name }} gallery image {{ $loop->iteration }}" loading="lazy">
+                        @foreach($galleryImages as $image)
+                            <img src="{{ $image['url'] }}" alt="{{ $product->name }} gallery image {{ $loop->iteration }}" loading="lazy">
                         @endforeach
                     </div>
                 @else

@@ -46,6 +46,7 @@ class CategoryForm
                             ->columnSpanFull(),
                         SpatieMediaLibraryFileUpload::make('image')
                             ->collection('image')
+                            ->disk('public')
                             ->label('Category image')
                             ->image()
                             ->conversion('preview')

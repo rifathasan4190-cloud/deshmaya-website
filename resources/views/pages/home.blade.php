@@ -15,11 +15,11 @@
                         @for($copy = 0; $copy < 2; $copy++)
                             <div class="produce-marquee__group" @if($copy) aria-hidden="true" inert @endif>
                                 @foreach($carouselProducts as $product)
-                                    @php($productImage = $product->getFirstMediaUrl('featured', 'preview') ?: $product->getFirstMediaUrl('featured'))
+                                    @php($productImage = $product->getAvailableMediaUrl())
                                     <a class="produce-marquee__item" href="{{ route('products.show', $product->slug) }}">
                                         <span class="produce-marquee__media">
                                             @if($productImage)
-                                                <img class="produce-marquee__image" src="{{ $productImage }}" alt="{{ $product->name }}" loading="lazy" decoding="async" data-produce-image data-fallback-src="{{ asset('images/products/'.$product->slug.'.jpg') }}">
+                                                <img class="produce-marquee__image" src="{{ $productImage }}" alt="{{ $product->name }}" loading="lazy" decoding="async" data-produce-image>
                                             @else
                                                 <x-picture class="produce-marquee__image" :src="'/images/products/'.$product->slug.'.jpg'" :alt="$product->name" data-produce-image />
                                             @endif

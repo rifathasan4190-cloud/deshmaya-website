@@ -11,6 +11,7 @@ use Illuminate\View\Component;
 class Picture extends Component
 {
     public ?array $meta;
+    public bool $available;
 
     public function __construct(
         public string $src,
@@ -19,6 +20,9 @@ class Picture extends Component
         public bool $eager = false,
     ) {
         $this->meta = self::manifest()[ltrim($src, '/')] ?? null;
+        $this->available = $this->meta !== null
+            || str_starts_with($src, 'http')
+            || is_file(public_path(ltrim($src, '/')));
     }
 
     public static function manifest(): array
