@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
 
@@ -10,11 +9,11 @@ class HomeController extends Controller
 {
     public function __invoke(): View
     {
-        $categories = Category::query()
+        $carouselProducts = Product::query()
             ->active()
             ->with('media')
-            ->whereNotNull('parent_id')
             ->ordered()
+            ->limit(12)
             ->get();
 
         $featuredProducts = Product::query()
@@ -34,6 +33,6 @@ class HomeController extends Controller
                 ->get();
         }
 
-        return view('pages.home', compact('categories', 'featuredProducts'));
+        return view('pages.home', compact('carouselProducts', 'featuredProducts'));
     }
 }

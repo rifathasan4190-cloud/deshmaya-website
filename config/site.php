@@ -8,7 +8,7 @@ return [
         ['label' => 'Products', 'route' => 'products.index', 'enabled' => true],
         ['label' => 'Export Markets', 'route' => 'export-markets', 'enabled' => true],
         ['label' => 'Certification', 'route' => 'certification', 'enabled' => true],
-        ['label' => 'Quality & Packaging', 'route' => 'quality-packaging', 'enabled' => true],
+        ['label' => 'Quality & Packaging', 'route' => 'quality-packaging', 'enabled' => false],
         ['label' => 'How We Export', 'route' => 'how-we-export', 'enabled' => true],
         ['label' => 'Contact', 'route' => 'contact', 'enabled' => true],
         ['label' => 'Blog', 'route' => null, 'enabled' => false],

@@ -2,7 +2,7 @@
 @section('title', 'About Us')
 @section('description', 'Learn about Deshmaya, a Bangladesh-based agricultural exporter connecting local growers with global markets.')
 @section('content')
-<x-page-banner title="About Us" subtitle="Our story, our commitment, our vision." tone="land" />
+<x-page-banner title="About Us" subtitle="Our story, our commitment, our vision." tone="land" image="/images/banners/about.jpg" />
 
 <section class="section-shell">
     <div class="container-shell split-feature split-feature--about">
@@ -13,7 +13,7 @@
             <p>We work with trusted farmers and suppliers, carefully coordinating selection, preparation and delivery to meet the needs of every order.</p>
             <a class="text-link" href="{{ route('products.index') }}">Explore our products <span aria-hidden="true">→</span></a>
         </div>
-        <x-image-placeholder class="split-feature__image" label="Farmer selecting fresh produce photography pending" tone="land" />
+        <x-picture class="split-feature__image" src="/images/features/about-farmers.jpg" alt="Farmer selecting fresh produce" sizes="(min-width: 1024px) 50vw, 100vw" />
     </div>
 </section>
 

@@ -13,12 +13,40 @@ class PublicPagesTest extends TestCase
 
     public function test_home_and_all_static_public_pages_render(): void
     {
-        $this->get(route('home'))->assertOk()->assertSee('Delivered to the');
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('Delivered to the')
+            ->assertSeeInOrder(['Harvest', 'Quality check', 'Packaging', 'Cold chain', 'Shipping']);
         $this->get(route('about'))->assertOk()->assertSee('Growing Bangladesh');
         $this->get(route('certification'))->assertOk()->assertSee('Documentation for every shipment');
         $this->get(route('how-we-export'))->assertOk()->assertSee('From farm to global market');
         $this->get(route('export-markets'))->assertOk()->assertSee('Our Market Reach');
         $this->get(route('quality-packaging'))->assertOk()->assertSeeText('Quality & Packaging');
+    }
+
+    public function test_home_displays_active_products_in_a_looping_produce_marquee(): void
+    {
+        $category = Category::create([
+            'name' => 'Fruits',
+            'slug' => 'fruits',
+            'is_active' => true,
+        ]);
+        $product = Product::create([
+            'category_id' => $category->id,
+            'name' => 'Fresh Kiwi',
+            'slug' => 'fresh-kiwi',
+            'is_active' => true,
+        ]);
+
+        $html = $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('data-produce-marquee-toggle', false)
+            ->assertSee('Fresh Kiwi')
+            ->assertSee(route('products.show', $product->slug), false)
+            ->assertSee('products/fresh-kiwi.jpg', false)
+            ->getContent();
+
+        $this->assertSame(2, preg_match_all('/class="produce-marquee__group"/', $html));
     }
 
     public function test_static_pages_have_single_main_heading_and_seo_metadata(): void

@@ -2,7 +2,7 @@
 @section('title', 'How We Export')
 @section('description', 'A transparent export process, from product sourcing and quality checks to packing and delivery.')
 @section('content')
-<x-page-banner title="How We Export" subtitle="From farm to global market." tone="shipping" />
+<x-page-banner title="How We Export" subtitle="From farm to global market." tone="shipping" image="/images/banners/how-we-export.jpg" />
 
 <section class="section-shell">
     <div class="container-shell">
@@ -29,9 +29,8 @@
 </section>
 
 <section class="export-promise">
-    <x-image-placeholder class="export-promise__image" label="Bangladesh export shipment photography pending" tone="shipping" />
+    <x-picture class="export-promise__image" src="/images/features/export-shipment.jpg" alt="Bangladesh export shipment" />
     <div class="export-promise__shade"></div>
-    <span class="photo-placeholder-note">Photo pending</span>
     <div class="container-shell export-promise__content">
         <p class="eyebrow text-white/80">Your trust, our priority</p>
         <h2>Every shipment prepared with care.</h2>

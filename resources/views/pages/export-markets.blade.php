@@ -2,7 +2,7 @@
 @section('title', 'Export Markets')
 @section('description', 'Deshmaya connects Bangladesh-sourced agricultural products with buyers across international markets.')
 @section('content')
-<x-page-banner title="Export Markets" subtitle="From Bangladesh to global markets." tone="markets" />
+<x-page-banner title="Export Markets" subtitle="From Bangladesh to global markets." tone="markets" image="/images/banners/export-markets.jpg" />
 
 <section class="section-shell">
     <div class="container-shell market-layout">

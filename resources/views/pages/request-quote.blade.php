@@ -2,7 +2,7 @@
 @section('title', 'Request a Quote')
 @section('description', 'Request pricing and availability for fresh produce and agricultural products from Bangladesh.')
 @section('content')
-<x-page-banner title="Request a Quote" subtitle="Tell us what your business needs." tone="produce" />
+<x-page-banner title="Request a Quote" subtitle="Tell us what your business needs." tone="produce" image="/images/banners/request-quote.jpg" />
 
 <section class="section-shell">
     <div class="container-shell quote-layout">
@@ -10,7 +10,7 @@
             <p class="eyebrow">Let’s work together</p>
             <h2>Tell us about your requirements.</h2>
             <p>Share the product, quantity and destination you have in mind. Our export team will review your request and follow up with availability and next steps.</p>
-            <x-image-placeholder class="quote-intro__image" label="Fresh export produce photography pending" tone="produce" />
+            <x-picture class="quote-intro__image" src="/images/features/quote-produce.jpg" alt="Fresh export produce" />
             <div class="quote-points">
                 <p><span aria-hidden="true">✓</span> Product and seasonal availability</p>
                 <p><span aria-hidden="true">✓</span> Buyer-specific packing options</p>

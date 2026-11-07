@@ -2,10 +2,45 @@
 @section('title', 'Fresh Produce from Bangladesh')
 @section('description', 'Premium fruits, vegetables and agricultural products, responsibly sourced in Bangladesh and delivered to global markets.')
 @section('content')
+<section class="section-shell" id="categories">
+    <div class="container-shell">
+        <x-section-heading eyebrow="From farm to market" title="Explore Our Produce" description="Browse fresh, export-ready products from our growing selection." center />
+        @if($carouselProducts->isNotEmpty())
+            <div class="produce-marquee" aria-label="Browse our produce">
+                <div class="produce-marquee__controls">
+                    <button class="produce-marquee__toggle" type="button" data-produce-marquee-toggle aria-label="Pause automatic produce scrolling" aria-pressed="false">Pause</button>
+                </div>
+                <div class="produce-marquee__viewport">
+                    <div class="produce-marquee__track" style="--produce-marquee-duration: {{ max(22, $carouselProducts->count() * 4) }}s">
+                        @for($copy = 0; $copy < 2; $copy++)
+                            <div class="produce-marquee__group" @if($copy) aria-hidden="true" inert @endif>
+                                @foreach($carouselProducts as $product)
+                                    @php($productImage = $product->getFirstMediaUrl('featured', 'preview') ?: $product->getFirstMediaUrl('featured'))
+                                    <a class="produce-marquee__item" href="{{ route('products.show', $product->slug) }}">
+                                        <span class="produce-marquee__media">
+                                            @if($productImage)
+                                                <img class="produce-marquee__image" src="{{ $productImage }}" alt="{{ $product->name }}" loading="lazy" decoding="async" data-produce-image data-fallback-src="{{ asset('images/products/'.$product->slug.'.jpg') }}">
+                                            @else
+                                                <x-picture class="produce-marquee__image" :src="'/images/products/'.$product->slug.'.jpg'" :alt="$product->name" data-produce-image />
+                                            @endif
+                                        </span>
+                                        <span class="produce-marquee__name">{{ $product->name }}</span>
+                                    </a>
+                                @endforeach
+                            </div>
+                        @endfor
+                    </div>
+                </div>
+            </div>
+        @else
+            <p class="empty-state">Our product collection is being prepared. Please check back soon.</p>
+        @endif
+    </div>
+</section>
+
 <section class="home-hero">
-    <x-image-placeholder class="home-hero__image" label="Bangladesh produce field and harvest photography pending" tone="hero" />
+    <x-picture class="home-hero__image" src="/images/homepage-banner.jpg" alt="" :eager="true" />
     <div class="home-hero__shade"></div>
-    <span class="photo-placeholder-note">Photo pending</span>
     <div class="home-hero__content container-shell">
         <p class="eyebrow text-white/85" data-reveal>Fresh from Bangladesh.</p>
         <h1 data-reveal style="--reveal-delay:80ms">Delivered to the <span>World.</span></h1>
@@ -33,37 +68,6 @@
     </div>
 </section>
 
-<section class="section-shell" id="categories">
-    <div class="container-shell">
-        <x-section-heading eyebrow="From farm to market" title="What are you looking for?" description="Select a category to explore our growing range of export-ready products." center />
-        <div class="category-grid">
-            @forelse($categories as $category)
-                @php($categoryImage = $category->getFirstMediaUrl('image', 'preview') ?: $category->getFirstMediaUrl('image'))
-                <a class="category-card hover-lift" href="{{ route('products.category', $category->slug) }}">
-                    @if($categoryImage)
-                        <img src="{{ $categoryImage }}" alt="" class="category-card__image" loading="lazy" decoding="async">
-                    @else
-                        <x-image-placeholder class="category-card__image" :label="$category->name.' category photo pending'" />
-                    @endif
-                    <span class="category-card__overlay"></span>
-                    <span class="category-card__content">
-                        <strong>{{ $category->name }}</strong>
-                        <span>Explore {{ $category->name }} <span aria-hidden="true">→</span></span>
-                    </span>
-                </a>
-            @empty
-                @foreach(['Fruits', 'Vegetables', 'Agricultural Products'] as $name)
-                    <a class="category-card hover-lift" href="{{ route('products.index') }}">
-                        <x-image-placeholder class="category-card__image" :label="$name.' category photo pending'" />
-                        <span class="category-card__overlay"></span>
-                        <span class="category-card__content"><strong>{{ $name }}</strong><span>Explore products <span aria-hidden="true">→</span></span></span>
-                    </a>
-                @endforeach
-            @endforelse
-        </div>
-    </div>
-</section>
-
 <section class="section-shell section-shell--tint">
     <div class="container-shell split-feature">
         <div class="split-feature__copy">
@@ -72,10 +76,11 @@
             <p>Deshmaya is a Bangladesh-based agricultural export company focused on supplying high-quality fruits, vegetables and agricultural products to international buyers. We work with trusted farmers and suppliers to ensure freshness, quality and timely delivery.</p>
             <a class="button button--primary" href="{{ route('about') }}">Read More <span aria-hidden="true">→</span></a>
         </div>
-        <x-image-placeholder class="split-feature__image" label="Bangladesh farm and grower photography pending" tone="land" />
+        <x-picture class="split-feature__image" src="/images/features/home-farm.jpg" alt="Bangladesh farm and growers" sizes="(min-width: 1024px) 50vw, 100vw" />
     </div>
 </section>
 
+{{--
 <section class="section-shell">
     <div class="container-shell">
         <div class="section-heading section-heading--row">
@@ -95,19 +100,20 @@
         </div>
     </div>
 </section>
+--}}
 
 <section class="benefits-band">
     <div class="container-shell">
-        <x-section-heading eyebrow="Why choose Deshmaya?" title="A trusted partner for every shipment" description="From sourcing to delivery, we work to make every step clear, dependable and quality focused." center />
+        <h2 class="benefits-band__title">From the field to shipping</h2>
         <div class="benefit-grid">
             @foreach([
-                ['icon' => '⌂', 'title' => 'Direct Sourcing', 'text' => 'Working closely with growers and trusted suppliers.'],
-                ['icon' => '✓', 'title' => 'Quality Control', 'text' => 'Careful checks at every stage of preparation.'],
-                ['icon' => '▣', 'title' => 'Export-ready Packaging', 'text' => 'Packed to align with product and buyer requirements.'],
-                ['icon' => '♧', 'title' => 'Reliable Supply', 'text' => 'Clear communication from order to shipment.'],
-                ['icon' => '◎', 'title' => 'Global Logistics', 'text' => 'Coordinated handling for international delivery.'],
+                ['icon' => '♧', 'title' => 'Harvest', 'text' => 'Picked at the right stage'],
+                ['icon' => '✓', 'title' => 'Quality check', 'text' => 'Checked against order requirements'],
+                ['icon' => '▣', 'title' => 'Packaging', 'text' => 'Prepared to buyer specifications'],
+                ['icon' => '❄', 'title' => 'Cold chain', 'text' => 'Temperature managed to protect freshness'],
+                ['icon' => '↗', 'title' => 'Shipping', 'text' => 'Coordinated from order to delivery'],
             ] as $benefit)
-                <article class="benefit-card" data-reveal>
+                <article class="benefit-card">
                     <span class="benefit-card__icon" aria-hidden="true">{{ $benefit['icon'] }}</span>
                     <h3>{{ $benefit['title'] }}</h3>
                     <p>{{ $benefit['text'] }}</p>
@@ -125,7 +131,7 @@
             <p>Every order is coordinated from product selection and quality checks through packing, documentation and delivery.</p>
             <a class="button button--primary" href="{{ route('how-we-export') }}">Learn More <span aria-hidden="true">→</span></a>
         </div>
-        <x-image-placeholder class="split-feature__image" label="Export-ready produce shipment photography pending" tone="shipping" />
+        <x-picture class="split-feature__image" src="/images/features/home-shipment.jpg" alt="Export-ready produce shipment" sizes="(min-width: 1024px) 50vw, 100vw" />
     </div>
 </section>
 @endsection

@@ -2,7 +2,7 @@
 @section('title', 'Our Products')
 @section('description', 'Explore fresh fruits, vegetables and agricultural products sourced in Bangladesh for export.')
 @section('content')
-<x-page-banner title="Our Products" subtitle="Fresh produce, thoughtfully selected for global markets." tone="produce" />
+<x-page-banner title="Our Products" subtitle="Fresh produce, thoughtfully selected for global markets." tone="produce" image="/images/banners/products.jpg" />
 
 <section class="section-shell">
     <div class="container-shell">

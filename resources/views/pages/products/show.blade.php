@@ -23,7 +23,7 @@
     <script type="application/ld+json">@json($productSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
 @endpush
 @section('content')
-<x-page-banner :title="$product->name" :subtitle="$product->short_description" tone="produce" :show-breadcrumb="false" />
+<x-page-banner :title="$product->name" :subtitle="$product->short_description" tone="produce" image="/images/banners/products.jpg" :show-breadcrumb="false" />
 
 <section class="section-shell section-shell--compact">
     <div class="container-shell">
@@ -39,7 +39,7 @@
                 @if($featuredImage)
                     <img class="product-detail__main-image" src="{{ $featuredImage }}" alt="{{ $product->name }}" loading="eager" decoding="async" fetchpriority="high">
                 @else
-                    <x-image-placeholder class="product-detail__main-image" :label="$product->name.' photo pending'" />
+                    <x-picture class="product-detail__main-image" :src="'/images/products/'.$product->slug.'.jpg'" :alt="$product->name" :eager="true" />
                 @endif
                 @if($product->getMedia('gallery')->isNotEmpty())
                     <div class="product-gallery" aria-label="{{ $product->name }} gallery">
@@ -48,9 +48,9 @@
                         @endforeach
                     </div>
                 @else
-                    <div class="product-gallery product-gallery--placeholders" aria-label="Additional product photos pending">
-                        @foreach(['Harvest', 'Freshness', 'Selection', 'Packing', 'Details'] as $label)
-                            <x-image-placeholder :label="$product->name.' '.$label.' photo pending'" />
+                    <div class="product-gallery" aria-label="{{ $product->name }} gallery">
+                        @foreach(['harvest', 'freshness', 'selection', 'packing', 'details'] as $label)
+                            <x-picture :src="'/images/products/'.$product->slug.'-'.$label.'.jpg'" :alt="$product->name.' '.ucfirst($label)" />
                         @endforeach
                     </div>
                 @endif

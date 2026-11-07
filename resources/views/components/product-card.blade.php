@@ -9,7 +9,7 @@
         @if($image)
             <img class="product-card__image" src="{{ $image }}" alt="{{ $product->name }}" loading="lazy" decoding="async">
         @else
-            <x-image-placeholder class="product-card__placeholder" :label="$product->name.' photo pending'" />
+            <x-picture class="product-card__image" :src="'/images/products/'.$product->slug.'.jpg'" :alt="$product->name" />
         @endif
     </a>
     <div class="product-card__body">

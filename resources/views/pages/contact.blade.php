@@ -2,7 +2,7 @@
 @section('title', 'Contact Us')
 @section('description', 'Contact Deshmaya to discuss agricultural sourcing, export requirements and business inquiries.')
 @section('content')
-<x-page-banner title="Contact Us" subtitle="Let’s talk about your requirements." tone="land" />
+<x-page-banner title="Contact Us" subtitle="Let’s talk about your requirements." tone="land" image="/images/banners/contact.jpg" />
 
 <section class="section-shell">
     <div class="container-shell contact-layout">
@@ -21,7 +21,7 @@
                     <div class="contact-detail"><span class="contact-detail__icon" aria-hidden="true">✉</span><div><strong>Email Us</strong><a href="mailto:{{ $email }}">{{ $email }}</a></div></div>
                 @endif
             </div>
-            <x-image-placeholder class="contact-map" label="Map artwork pending" tone="markets" />
+            <x-picture class="contact-map" src="/images/features/contact-map.jpg" alt="Map showing Bangladesh" />
             <div class="contact-social">
                 <strong>Follow Deshmaya</strong>
                 <div class="social-links">

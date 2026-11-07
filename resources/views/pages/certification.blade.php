@@ -2,7 +2,7 @@
 @section('title', 'Certifications & Documentation')
 @section('description', 'Learn about the quality checks and export documentation coordinated for Deshmaya shipments.')
 @section('content')
-<x-page-banner title="Certifications" subtitle="Quality you can verify." tone="quality" />
+<x-page-banner title="Certifications" subtitle="Quality you can verify." tone="quality" image="/images/banners/certifications.jpg" />
 
 <section class="section-shell">
     <div class="container-shell">

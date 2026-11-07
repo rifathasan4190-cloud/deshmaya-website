@@ -9,6 +9,38 @@ Alpine.start();
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+document.querySelectorAll('[data-produce-marquee-toggle]').forEach((toggle) => {
+    const marquee = toggle.closest('.produce-marquee');
+    if (!marquee) return;
+
+    toggle.addEventListener('click', () => {
+        const isPaused = marquee.classList.toggle('is-paused');
+        toggle.setAttribute('aria-pressed', String(isPaused));
+        toggle.setAttribute('aria-label', `${isPaused ? 'Resume' : 'Pause'} automatic produce scrolling`);
+        toggle.textContent = isPaused ? 'Resume' : 'Pause';
+    });
+});
+
+const handleProduceImageError = (image) => {
+    if (image.dataset.fallbackSrc && image.dataset.fallbackAttempted !== 'true') {
+        image.dataset.fallbackAttempted = 'true';
+        image.src = image.dataset.fallbackSrc;
+        return;
+    }
+
+    image.classList.add('is-unavailable');
+};
+
+document.addEventListener('error', (event) => {
+    if (event.target instanceof HTMLImageElement && event.target.hasAttribute('data-produce-image')) {
+        handleProduceImageError(event.target);
+    }
+}, true);
+
+document.querySelectorAll('img[data-produce-image]').forEach((image) => {
+    if (image.complete && image.naturalWidth === 0) handleProduceImageError(image);
+});
+
 // Loader: hide after window load, but never before data-min and never later than data-max.
 const loader = document.getElementById('site-loader');
 if (loader) {

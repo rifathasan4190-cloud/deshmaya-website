@@ -2,13 +2,13 @@
     'title',
     'subtitle' => null,
     'tone' => 'produce',
+    'image',
     'showBreadcrumb' => true,
 ])
 
 <section class="page-banner">
-    <x-image-placeholder class="page-banner__image" :label="$title.' banner photo pending'" :tone="$tone" />
+    <x-picture class="page-banner__image" :src="$image" alt="" :eager="true" />
     <div class="page-banner__shade"></div>
-    <span class="photo-placeholder-note">Photo pending</span>
     <div class="page-banner__content container-shell">
         @if($showBreadcrumb)
             <nav class="page-banner__breadcrumb" aria-label="Breadcrumb">
