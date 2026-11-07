@@ -1,8 +1,8 @@
 <header class="site-header" x-data="{ open: false }">
     <div class="container-shell site-header__inner">
         <a href="{{ route('home') }}" class="brand-lockup" aria-label="{{ setting('general.site_name', 'Deshmaya') }} home">
-            @if($logo = setting_url('general.logo'))
-                <img src="{{ $logo }}" alt="{{ setting('general.site_name', 'Deshmaya') }}" class="brand-lockup__image" width="172" height="48">
+            @if($logo = setting_url('general.logo', asset('images/logo.png')))
+                <img src="{{ $logo }}" alt="{{ setting('general.site_name', 'Deshmaya') }}" class="brand-lockup__image" width="172" height="57">
             @else
                 <span class="brand-lockup__mark" aria-hidden="true">D</span>
                 <span class="brand-lockup__text"><strong>{{ setting('general.site_name', 'Deshmaya') }}</strong><small>Global Agri Exporter</small></span>

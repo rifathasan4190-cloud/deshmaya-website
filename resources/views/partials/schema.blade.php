@@ -3,7 +3,7 @@
         ->map(fn (string $network) => setting("social.$network"))
         ->filter()
         ->values();
-    $logo = setting_url('general.logo');
+    $logo = setting_url('general.logo', asset('images/logo.png'));
     $organization = array_filter([
         '@context' => 'https://schema.org',
         '@type' => 'Organization',

@@ -33,7 +33,15 @@ class BusinessInfo extends SettingsPage
                         ->schema([
                             TextInput::make('site_name')->label('Business name')->required()->maxLength(100),
                             TextInput::make('tagline')->maxLength(160),
-                            FileUpload::make('logo')->label('Logo (light)')->image()->disk('public')->directory('site')->visibility('public')->maxSize(4096),
+                            FileUpload::make('logo')
+                                ->label('Logo (light)')
+                                ->formatStateUsing(fn (?string $state): ?string => $state === '/images/logo.png' ? null : $state)
+                                ->helperText('The site uses public/images/logo.png by default. Upload an image here to replace it.')
+                                ->image()
+                                ->disk('public')
+                                ->directory('site')
+                                ->visibility('public')
+                                ->maxSize(4096),
                             FileUpload::make('logo_dark')->label('Logo (dark)')->image()->disk('public')->directory('site')->visibility('public')->maxSize(4096),
                             FileUpload::make('favicon')->image()->disk('public')->directory('site')->visibility('public')->maxSize(4096),
                             Textarea::make('footer_text')->rows(3)->maxLength(500),

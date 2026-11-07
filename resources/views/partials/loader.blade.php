@@ -1,6 +1,6 @@
 @if(setting('loader.enabled', '1') == '1')
 @php
-    $loaderImg = setting_url('loader.image') ?: setting_url('general.logo');
+    $loaderImg = setting_url('loader.image') ?: setting_url('general.logo', asset('images/logo.png'));
     $loaderBg = preg_match('/^#[0-9a-fA-F]{6}$/', (string) setting('loader.background_color')) ? setting('loader.background_color') : null;
 @endphp
 <div id="site-loader" data-min="{{ (int) setting('loader.min_ms', 600) }}" data-max="{{ (int) setting('loader.max_ms', 3000) }}"

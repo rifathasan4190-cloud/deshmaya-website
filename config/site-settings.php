@@ -23,7 +23,7 @@ return [
             'values' => [
                 'site_name' => 'Deshmaya',
                 'tagline' => 'Global Agri Exporter',
-                'logo' => '',
+                'logo' => '/images/logo.png',
                 'logo_dark' => '',
                 'favicon' => '',
                 'footer_text' => 'Fresh Produce. Global Opportunities.',

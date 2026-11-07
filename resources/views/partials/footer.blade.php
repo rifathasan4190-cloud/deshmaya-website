@@ -2,8 +2,8 @@
     <div class="container-shell site-footer__main">
         <div class="site-footer__brand">
             <a href="{{ route('home') }}" class="brand-lockup brand-lockup--footer">
-                @if($logo = setting_url('general.logo'))
-                    <img src="{{ $logo }}" alt="{{ setting('general.site_name', 'Deshmaya') }}" class="brand-lockup__image" width="172" height="48" loading="lazy">
+                @if($logo = setting_url('general.logo', asset('images/logo.png')))
+                    <img src="{{ $logo }}" alt="{{ setting('general.site_name', 'Deshmaya') }}" class="brand-lockup__image" width="172" height="57" loading="lazy">
                 @else
                     <span class="brand-lockup__mark" aria-hidden="true">D</span>
                     <span class="brand-lockup__text"><strong>{{ setting('general.site_name', 'Deshmaya') }}</strong><small>Global Agri Exporter</small></span>

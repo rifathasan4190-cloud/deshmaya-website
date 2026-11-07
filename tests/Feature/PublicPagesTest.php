@@ -145,6 +145,14 @@ class PublicPagesTest extends TestCase
             ->assertHeader('Strict-Transport-Security', 'max-age=31536000');
     }
 
+    public function test_uploaded_site_logo_is_used_across_public_pages(): void
+    {
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('src="/images/logo.png"', false)
+            ->assertSee('"logo":"/images/logo.png"', false);
+    }
+
     public function test_custom_not_found_and_server_error_views_render(): void
     {
         $notFound = $this->get('/page-that-does-not-exist')
@@ -220,7 +228,47 @@ class PublicPagesTest extends TestCase
             ->assertSee('https://example.com/mango-guide', false)
             ->assertSee(route('request-quote', ['product' => $product->slug]), false);
 
+        $productResponse->assertDontSee('Demo content')
+            ->assertDontSee('Sample availability');
         $this->assertSame(1, preg_match_all('/<h1(?:\s|>)/i', $productResponse->getContent()));
+    }
+
+    public function test_products_without_detail_data_render_labeled_demo_content(): void
+    {
+        $parentCategory = Category::create([
+            'name' => 'Fresh Produce',
+            'slug' => 'fresh-produce',
+            'is_active' => true,
+        ]);
+        $category = Category::create([
+            'parent_id' => $parentCategory->id,
+            'name' => 'Vegetables',
+            'slug' => 'vegetables',
+            'is_active' => true,
+        ]);
+        $product = Product::create([
+            'category_id' => $category->id,
+            'name' => 'Bottle Gourd',
+            'slug' => 'bottle-gourd',
+            'is_active' => true,
+        ]);
+        $otherProduct = Product::create([
+            'category_id' => $category->id,
+            'name' => 'Sample Pumpkin',
+            'slug' => 'sample-pumpkin',
+            'is_active' => true,
+        ]);
+
+        $this->get(route('products.show', $product->slug))
+            ->assertOk()
+            ->assertSee('Demo content — confirm these sample details in Product admin before publishing.')
+            ->assertSee('Demo SKU:')
+            ->assertSee('DEMO-BOTTLEGOURD')
+            ->assertSee('Carton Box (Sample)')
+            ->assertSee('60 x 40 x 15 cm (sample)')
+            ->assertSee('Supplier Guide (Sample)')
+            ->assertSee('Sample / confirm availability')
+            ->assertSee($otherProduct->name);
     }
 
     public function test_product_listing_provides_admin_product_data_to_quick_view(): void

@@ -60,7 +60,7 @@ class ProductController extends Controller
     {
         $product = Product::query()
             ->active()
-            ->with(['category', 'media'])
+            ->with(['category.parent', 'media'])
             ->where('slug', $slug)
             ->firstOrFail();
 
@@ -70,10 +70,11 @@ class ProductController extends Controller
             ->where('id', '!=', $product->id)
             ->when($product->category_id, fn ($query) => $query->where('category_id', $product->category_id))
             ->ordered()
-            ->limit(4)
+            ->limit(8)
             ->get();
 
         $currentMonth = now()->month;
+        $demoSeasonMonths = range(1, 12);
         $inSeasonProducts = Product::query()
             ->active()
             ->with(['category', 'media'])
@@ -81,14 +82,22 @@ class ProductController extends Controller
             ->where('id', '!=', $product->id)
             ->ordered()
             ->get()
-            ->filter(fn (Product $candidate): bool => in_array(
-                $currentMonth,
-                array_map('intval', $candidate->season_months ?? []),
-                true,
-            ))
-            ->take(7)
+            ->filter(function (Product $candidate) use ($currentMonth, $demoSeasonMonths): bool {
+                $seasonMonths = filled($candidate->season_months)
+                    ? array_map('intval', $candidate->season_months)
+                    : $demoSeasonMonths;
+
+                return in_array($currentMonth, $seasonMonths, true);
+            })
+            ->take(8)
             ->values();
 
-        return view('pages.products.show', compact('product', 'relatedProducts', 'inSeasonProducts', 'currentMonth'));
+        return view('pages.products.show', compact(
+            'product',
+            'relatedProducts',
+            'inSeasonProducts',
+            'currentMonth',
+            'demoSeasonMonths',
+        ));
     }
 }
