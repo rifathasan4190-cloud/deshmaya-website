@@ -162,9 +162,16 @@ class CatalogTest extends TestCase
                 'name' => 'Export Oranges',
                 'slug' => '',
                 'category_id' => $category->id,
+                'sku' => 'ORANGE-EXPORT-01',
                 'short_description' => 'Fresh oranges ready for export.',
                 'description' => 'Carefully sorted and packed oranges.',
                 'specs' => ['Origin' => 'Bangladesh', 'Packaging' => 'Carton'],
+                'packaging_options' => [
+                    ['name' => 'Carton Box', 'dimensions' => '60 x 40 x 15 cm'],
+                ],
+                'season_months' => [(string) now()->month, (string) now()->addMonth()->month],
+                'supplier_guide_title' => 'Orange Supplier Guide',
+                'supplier_guide_url' => 'https://example.com/orange-guide',
                 'sort_order' => 1,
                 'is_active' => true,
                 'is_featured' => false,
@@ -175,7 +182,13 @@ class CatalogTest extends TestCase
         $this->assertDatabaseHas('products', [
             'slug' => 'export-oranges',
             'category_id' => $category->id,
+            'sku' => 'ORANGE-EXPORT-01',
         ]);
+        $product = Product::query()->where('slug', 'export-oranges')->firstOrFail();
+        $this->assertSame([['name' => 'Carton Box', 'dimensions' => '60 x 40 x 15 cm']], $product->packaging_options);
+        $this->assertSame([now()->month, now()->addMonth()->month], $product->season_months);
+        $this->assertSame('Orange Supplier Guide', $product->supplier_guide_title);
+        $this->assertSame('https://example.com/orange-guide', $product->supplier_guide_url);
     }
 
     public function test_product_form_saves_featured_and_gallery_media(): void

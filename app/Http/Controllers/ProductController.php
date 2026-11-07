@@ -73,6 +73,22 @@ class ProductController extends Controller
             ->limit(4)
             ->get();
 
-        return view('pages.products.show', compact('product', 'relatedProducts'));
+        $currentMonth = now()->month;
+        $inSeasonProducts = Product::query()
+            ->active()
+            ->with(['category', 'media'])
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->ordered()
+            ->get()
+            ->filter(fn (Product $candidate): bool => in_array(
+                $currentMonth,
+                array_map('intval', $candidate->season_months ?? []),
+                true,
+            ))
+            ->take(7)
+            ->values();
+
+        return view('pages.products.show', compact('product', 'relatedProducts', 'inSeasonProducts', 'currentMonth'));
     }
 }

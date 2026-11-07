@@ -15,10 +15,93 @@
         </nav>
 
         @if($products->isNotEmpty())
-            <div class="product-grid">
-                @foreach($products as $product)
-                    <x-product-card :product="$product" />
-                @endforeach
+            <div
+                class="product-catalog"
+                x-data="{
+                    quickView: null,
+                    previousFocus: null,
+                    openQuickView(product, event) {
+                        this.previousFocus = event.currentTarget;
+                        this.quickView = product;
+                        document.body.classList.add('quick-view-open');
+                        this.$nextTick(() => this.$refs.quickViewClose.focus());
+                    },
+                    closeQuickView() {
+                        if (! this.quickView) return;
+                        this.quickView = null;
+                        document.body.classList.remove('quick-view-open');
+                        this.$nextTick(() => this.previousFocus?.focus());
+                    },
+                    trapQuickViewFocus(event) {
+                        if (event.key !== 'Tab') return;
+                        const focusable = this.$refs.quickViewDialog.querySelectorAll('a[href], button:not([disabled])');
+                        const first = focusable[0];
+                        const last = focusable[focusable.length - 1];
+                        if (event.shiftKey && document.activeElement === first) {
+                            event.preventDefault();
+                            last.focus();
+                        } else if (! event.shiftKey && document.activeElement === last) {
+                            event.preventDefault();
+                            first.focus();
+                        }
+                    }
+                }"
+                @keydown.escape.window="closeQuickView()"
+            >
+                <div class="product-grid">
+                    @foreach($products as $product)
+                        <x-product-card :product="$product" :quick-view="true" />
+                    @endforeach
+                </div>
+
+                <div
+                    class="quick-view"
+                    x-cloak
+                    x-show="quickView"
+                    x-transition.opacity.duration.200ms
+                    @click.self="closeQuickView()"
+                >
+                    <section
+                        class="quick-view__dialog"
+                        x-ref="quickViewDialog"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="quick-view-title"
+                        @keydown="trapQuickViewFocus($event)"
+                    >
+                        <button class="quick-view__close" type="button" aria-label="Close quick view" x-ref="quickViewClose" @click="closeQuickView()">×</button>
+                        <div class="quick-view__visual">
+                            <template x-if="quickView?.image">
+                                <img class="quick-view__image" :src="quickView.image" :alt="quickView.name">
+                            </template>
+                            <template x-if="! quickView?.image">
+                                <div class="picture-placeholder quick-view__placeholder" role="img" :aria-label="quickView?.name"></div>
+                            </template>
+                        </div>
+                        <div class="quick-view__content">
+                            <p class="eyebrow" x-text="quickView?.category"></p>
+                            <h2 id="quick-view-title" x-text="quickView?.name"></h2>
+                            <p class="quick-view__intro" x-show="quickView?.shortDescription" x-text="quickView?.shortDescription"></p>
+                            <p class="quick-view__description" x-show="quickView?.description" x-text="quickView?.description"></p>
+                            <section class="quick-view__specs" x-show="Object.keys(quickView?.specs ?? {}).length">
+                                <h3>Product details</h3>
+                                <dl>
+                                    <template x-for="(value, label) in (quickView?.specs ?? {})" :key="label">
+                                        <div>
+                                            <dt x-text="label"></dt>
+                                            <dd x-text="Array.isArray(value) ? value.join(', ') : value"></dd>
+                                        </div>
+                                    </template>
+                                </dl>
+                            </section>
+                            <p class="quick-view__category">Category: <span x-text="quickView?.category"></span></p>
+                            <div class="quick-view__actions">
+                                <a class="button button--primary" :href="quickView?.quoteUrl">Request a Quote <span aria-hidden="true">→</span></a>
+                                <a class="quick-view__details-link" :href="quickView?.productUrl">View full details</a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
         @else
             <div class="empty-state empty-state--large">

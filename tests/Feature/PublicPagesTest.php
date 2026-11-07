@@ -177,8 +177,22 @@ class PublicPagesTest extends TestCase
             'short_description' => 'Premium seasonal mangoes for export.',
             'description' => 'Selected and packed to buyer requirements.',
             'specs' => ['Origin' => 'Bangladesh'],
+            'sku' => 'MANGO-001',
+            'packaging_options' => [
+                ['name' => 'Carton Box', 'dimensions' => '60 x 40 x 15 cm'],
+            ],
+            'season_months' => [(string) now()->month],
+            'supplier_guide_title' => 'Mango Supplier Guide',
+            'supplier_guide_url' => 'https://example.com/mango-guide',
             'is_active' => true,
             'is_featured' => true,
+        ]);
+        $inSeasonProduct = Product::create([
+            'category_id' => $category->id,
+            'name' => 'Seasonal Mango Variety',
+            'slug' => 'seasonal-mango-variety',
+            'season_months' => [(string) now()->month],
+            'is_active' => true,
         ]);
 
         $this->get(route('home'))
@@ -195,9 +209,54 @@ class PublicPagesTest extends TestCase
             ->assertOk()
             ->assertSee('Selected and packed to buyer requirements.')
             ->assertSee('Bangladesh')
+            ->assertSee('MANGO-001')
+            ->assertSee('Packaging Options')
+            ->assertSee('Carton Box')
+            ->assertSee('60 x 40 x 15 cm')
+            ->assertSee('Season Calendar')
+            ->assertSee('In season now')
+            ->assertSee($inSeasonProduct->name)
+            ->assertSee('Mango Supplier Guide')
+            ->assertSee('https://example.com/mango-guide', false)
             ->assertSee(route('request-quote', ['product' => $product->slug]), false);
 
         $this->assertSame(1, preg_match_all('/<h1(?:\s|>)/i', $productResponse->getContent()));
+    }
+
+    public function test_product_listing_provides_admin_product_data_to_quick_view(): void
+    {
+        $parentCategory = Category::create([
+            'name' => 'Fresh Produce',
+            'slug' => 'fresh-produce',
+            'is_active' => true,
+        ]);
+        $category = Category::create([
+            'parent_id' => $parentCategory->id,
+            'name' => 'Vegetables',
+            'slug' => 'vegetables',
+            'is_active' => true,
+        ]);
+        $product = Product::create([
+            'category_id' => $category->id,
+            'name' => 'Bottle Gourd',
+            'slug' => 'bottle-gourd',
+            'short_description' => 'Fresh bottle gourd for export.',
+            'description' => 'Selected and packed to buyer requirements.',
+            'specs' => ['Packaging' => 'Carton boxes', 'Origin' => 'Bangladesh'],
+            'is_active' => true,
+        ]);
+
+        $this->get(route('products.index'))
+            ->assertOk()
+            ->assertSee('product-card--minimal', false)
+            ->assertSee('Quick View', false)
+            ->assertSee('openQuickView(', false)
+            ->assertSee($product->name)
+            ->assertSee($product->description)
+            ->assertSee('Packaging')
+            ->assertSee('Carton boxes')
+            ->assertSee('request-a-quote?product=bottle-gourd')
+            ->assertSee(route('products.show', $product->slug), false);
     }
 
     public function test_inactive_products_are_not_publicly_visible(): void

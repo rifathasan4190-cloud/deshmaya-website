@@ -16,7 +16,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-#[Fillable(['category_id', 'name', 'slug', 'short_description', 'description', 'specs', 'is_featured', 'is_active', 'sort_order', 'seo_title', 'seo_description'])]
+#[Fillable(['category_id', 'name', 'slug', 'sku', 'short_description', 'description', 'specs', 'packaging_options', 'season_months', 'supplier_guide_title', 'supplier_guide_url', 'is_featured', 'is_active', 'sort_order', 'seo_title', 'seo_description'])]
 class Product extends Model implements HasMedia
 {
     /** @use HasFactory<ProductFactory> */
@@ -38,6 +38,8 @@ class Product extends Model implements HasMedia
         return [
             'category_id' => 'integer',
             'specs' => 'array',
+            'packaging_options' => 'array',
+            'season_months' => 'array',
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
             'sort_order' => 'integer',

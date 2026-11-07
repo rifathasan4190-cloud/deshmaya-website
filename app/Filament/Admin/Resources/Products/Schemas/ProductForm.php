@@ -2,7 +2,9 @@
 
 namespace App\Filament\Admin\Resources\Products\Schemas;
 
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
@@ -20,6 +22,10 @@ class ProductForm
                 Section::make('Product details')
                     ->schema([
                         TextInput::make('name')->required()->maxLength(180),
+                        TextInput::make('sku')
+                            ->label('SKU')
+                            ->maxLength(100)
+                            ->unique(ignoreRecord: true),
                         TextInput::make('slug')
                             ->maxLength(200)
                             ->unique(ignoreRecord: true)
@@ -60,6 +66,55 @@ class ProductForm
                             ->conversion('preview')
                             ->maxFiles(20)
                             ->maxSize(10240),
+                    ])
+                    ->columns(2),
+                Section::make('Packaging options')
+                    ->schema([
+                        Repeater::make('packaging_options')
+                            ->schema([
+                                TextInput::make('name')
+                                    ->label('Packaging type')
+                                    ->required()
+                                    ->maxLength(100),
+                                TextInput::make('dimensions')
+                                    ->label('Dimensions')
+                                    ->placeholder('60 x 40 x 15 cm')
+                                    ->maxLength(100),
+                            ])
+                            ->columns(2)
+                            ->defaultItems(0)
+                            ->addActionLabel('Add packaging option')
+                            ->reorderable()
+                            ->columnSpanFull(),
+                    ]),
+                Section::make('Season and supplier guide')
+                    ->schema([
+                        CheckboxList::make('season_months')
+                            ->label('Available months')
+                            ->options([
+                                1 => 'January',
+                                2 => 'February',
+                                3 => 'March',
+                                4 => 'April',
+                                5 => 'May',
+                                6 => 'June',
+                                7 => 'July',
+                                8 => 'August',
+                                9 => 'September',
+                                10 => 'October',
+                                11 => 'November',
+                                12 => 'December',
+                            ])
+                            ->columns(4)
+                            ->bulkToggleable()
+                            ->columnSpanFull(),
+                        TextInput::make('supplier_guide_title')
+                            ->label('Supplier guide link text')
+                            ->maxLength(180),
+                        TextInput::make('supplier_guide_url')
+                            ->label('Supplier guide URL')
+                            ->url()
+                            ->maxLength(2048),
                     ])
                     ->columns(2),
                 Section::make('Specifications')
